@@ -26,7 +26,7 @@ for line in inFile:
 		G.add_edge(nodeName, otherNodeName, weight=int(connectElements[2]))
 
 #print(nx.get_edge_attributes(G, "weight"))
-weights = nx.get_edge_attributes(G, 'weight')
+#weights = nx.get_edge_attributes(G, 'weight')
 
 #print(weights)
 #for edge in G.edges(data=True):
@@ -35,13 +35,35 @@ weights = nx.get_edge_attributes(G, 'weight')
 #print(nx.edge_betweenness_centrality(G, weight='weight'))
 #for betweenness in sorted(nx.edge_betweenness_centrality(G, weight='weight').items(), key=lambda x: -x[1]):
 i = 0
+removedEdges = []
 while(nx.is_connected(G)):
-	betweenness = sorted(nx.edge_betweenness_centrality(G, weight='weight').items(), key=lambda x: -x[1])
+	betweenness = sorted(nx.edge_betweenness_centrality(G).items(), key=lambda x: -x[1])
+	u = betweenness[0][0][0]
+	v = betweenness[0][0][1]
+
+	removedEdges.append([u, v, G[u][v]['weight']])
 	G.remove_edge(betweenness[0][0][0], betweenness[0][0][1])
 	i += 1
 
+print("Edges removed: " + str(i))
+
+i = 0
+for edge in removedEdges:
+	u = edge[0]
+	v = edge[1]
+	w = edge[2]
+	G.add_edge(u, v, weight=w)
+	i += 1
+	if (nx.is_connected(G)):
+		G.remove_edge(u, v)
+		i -= 1
+
+print("Edges added back: " + str(i))
+
+#for betweenness in sorted(nx.edge_betweenness_centrality(G).items(), key=lambda x: -x[1]):
+#	print(betweenness)
+
 #print(betweenness)
-print("No longer connected! Edges removed: " + str(i))
 
 
 
@@ -54,5 +76,5 @@ nx.draw(G,
         node_size   = [4 for v in G],
         with_labels = False)
 
-#plot.savefig('city-plot.png')
+plot.savefig('city-plot.png')
 plot.show()
