@@ -15,8 +15,12 @@ for line in inFile:
 	indentedLines = int(elmts[4])
 	G.add_node(nodeName, pos=(float(elmts[2]), float(elmts[3])))
 	while indentedLines > 0:
-		next(inFile)
+		nextLine = next(inFile)
 		indentedLines -= 1
+		connectElements = [x.strip() for x in nextLine.split(',')]
+		#print(connectElements)
+		otherNodeName = connectElements[0] + ',' + connectElements[1]
+		G.add_edge(nodeName, otherNodeName)
 	#if indentedLines > 0:
 
 	#else:
