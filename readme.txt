@@ -1,4 +1,4 @@
-EECS4415 Project 5
+EECS4415 Project 5: Disconnected
 
 Written by:
 
